@@ -4,7 +4,7 @@ services:
 
   db:
     image: postgres
-    port:
+    ports:
       - 5432:5432
     restart: always
     environment:
