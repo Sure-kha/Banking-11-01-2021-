@@ -7,7 +7,7 @@ node {
 
      stage("Build") {
 
-       sh 'docker build . -t  surekha1988/pipeline:latest
+       sh 'docker build . -t  surekha1988/pipeline:latest'
        sh 'docker image list'
 
     }
