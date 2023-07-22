@@ -12,7 +12,7 @@ node {
 
     }
 
-    withCredentials([string(credentialsId: 'dock-cred', variable: 'PASSWORD')]) {
+    withCredentials([string(credentialsId: 'dock-pass', variable: 'PASSWORD')]) {
         sh 'docker login -u surekha1988 -p $PASSWORD'
     }
 
