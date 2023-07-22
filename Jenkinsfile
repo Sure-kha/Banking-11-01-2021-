@@ -21,6 +21,7 @@ node {
     }
 
     stage("kubernetes deployment"){
+        sh 'sudo vi deployment.yml'
         sh 'kubectl apply -f deployment.yml'
     }
 }
