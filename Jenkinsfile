@@ -1,28 +1,26 @@
-pipeline{
-  agent any
-  stages{
-    stage("build"){
-      steps{
-        echo "Building the Application...."
-      }
+node {
+
+    stage("Git Clone"){
+
+        git credentialsId: 'git-hub cred', url: 'https://github.com/Sure-kha/Banking-11-01-2021-.git', branch: 'jenkins-docker' 
     }
-    stage("test"){
-      steps{
-        echo "testing the application..."
-      }
+
+     stage("Build") {
+
+       sh 'docker build . -t  surekha1988/pipeline:latest
+       sh 'docker image list'
+
     }
-    stage("deploy"){
-      steps{
-        echo "Deploy the application..."
-        script{
-//           def dockerCmd='docker run -d -p 4200:4200 surekha1988/myfirst-app:banking-1.0'
-          def dockerComposeCmd="docker-compose -f docker-compose.yaml up --detach"
-          sshagent(['ec2-server-key']) {
-            sh "scp docker-compose.yaml ubuntu@3.110.49.81:/home/ubuntu"
-          sh "ssh -o StrictHostKeyChecking=no ubuntu@3.110.49.81 ${dockerComposeCmd}"
-         }
-        }
-      }
+
+    withCredentials([string(credentialsId: 'docker-hub', variable: 'PASSWORD')]) {
+        sh 'docker login -u surekha1988 -p $PASSWORD'
     }
-  }
+
+    stage("Push Image to Docker Hub"){
+        sh 'docker push surekha1988/pipeline:latest'
+    }
+
+    stage("kubernetes deployment"){
+        sh 'kubectl apply -f deployment.yml'
+    }
 }
